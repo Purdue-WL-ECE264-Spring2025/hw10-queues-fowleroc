@@ -2,11 +2,15 @@
 
 #include <stdlib.h>
 
-struct list_node *new_node(size_t value) { return NULL; }
+struct list_node *new_node(size_t value) {
+  struct list_node *node = malloc(sizeof(struct list_node));
+  node->value = value;
+  node->next = NULL;
+  return node;
+}
 
 void insert_at_head(struct linked_list *list, size_t value) {
-  struct list_node *new = malloc(sizeof(struct list_node));
-  new->value = value;
+  struct list_node *new = new_node(value);
   if (list->head == NULL){
     list->head = new;
     return;
@@ -16,8 +20,7 @@ void insert_at_head(struct linked_list *list, size_t value) {
 }
 
 void insert_at_tail(struct linked_list *list, size_t value) {
-  struct list_node *new = malloc(sizeof(struct list_node));
-  new->value = value;
+  struct list_node *new = new_node(value);
   new->next = NULL;
 
     struct list_node *curr = list->head;
@@ -28,25 +31,37 @@ void insert_at_tail(struct linked_list *list, size_t value) {
   }
 
 
-size_t remove_from_head(struct linked_list *list) { 
+size_t remove_from_head(struct linked_list *list) {  
+  if (list->head == NULL) return 0;
   struct list_node *unwanted = list->head;
+  size_t val = unwanted->value;
   list->head = unwanted->next;
-  return 0; 
+  free(unwanted);
+  return val;
 }
 
 size_t remove_from_tail(struct linked_list *list) { 
-  if (list->head->next == NULL){
+  if (list->head == NULL) return 0;
+  if (list->head->next == NULL) {
+    size_t val = list->head->value;
+    free(list->head);
     list->head = NULL;
+    return val;
   }
-  else{
-    struct list_node *curr = list->head;
-    while(curr->next !=NULL){
-      curr = curr->next;
-    }
-    curr->next = NULL;
+
+  struct list_node *prev = NULL;
+  struct list_node *curr = list->head;
+  while (curr->next != NULL) {
+    prev = curr;
+    curr = curr->next;
   }
-  return 0; 
-}
+
+  size_t val = curr->value;
+  free(curr);
+  prev->next = NULL;
+  return val;
+} 
+
 
 void free_list(struct linked_list list) {
   struct list_node *curr = list.head;
