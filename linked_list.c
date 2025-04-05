@@ -15,17 +15,14 @@ void insert_at_tail(struct linked_list *list, size_t value) {
   struct list_node *new = malloc(sizeof(struct list_node));
   new->value = value;
   new->next = NULL;
-  if (list->head == NULL){
-    list->head == new;
-  }
-  else{
+
     struct list_node *curr = list->head;
     while(curr->next != NULL){
       curr = curr->next;
     }
     curr->next = new;
   }
-}
+
 
 size_t remove_from_head(struct linked_list *list) { 
   struct list_node *unwanted = list->head;
@@ -55,7 +52,6 @@ void free_list(struct linked_list list) {
     curr = nextNode;
   }
   list.head = NULL;
-  free(&list);
 }
 
 
