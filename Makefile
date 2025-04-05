@@ -12,5 +12,17 @@ clean:
 	/bin/rm -rf *.o
 	/bin/rm -rf $(APP)
 
+test1: $(APP) ./hw10 testcases/1.txt
+test2: $(APP) ./hw10 testcases/2.txt
+test3: $(APP) ./hw10 testcases/3.txt
+
+time_test: $(APP)
+    echo "test 1:  "
+    time ./hw10 testcases/1.txt
+    echo "test 2:  "
+    time ./hw10 testcases/2.txt
+    echo "test 3:  "
+    time ./hw10 testcases/3.txt
+
 %.o: %.c $(HEADERS)
 	$(CC) -c $< -o $@ $(CFLAGS)
