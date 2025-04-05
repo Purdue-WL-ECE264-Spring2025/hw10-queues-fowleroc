@@ -68,15 +68,15 @@ bool istarget(struct game_state state) {
 }
 
 int number_of_moves(struct game_state start) { 
-    struct queue q;
+    struct queue q = {0};
     enqueue(&q, start);
-
-    uint64_t start_key = serialize(start);
     
     while (q.data.head != NULL) {
         struct game_state curr = dequeue(&q);
-        if (is_goal(curr)) {
-            return curr.num_steps;
+        if (istarget(curr)) {
+            int res = curr.num_steps;
+            free_list(q.data);
+            return res;
         }
 
         struct game_state next[4];
@@ -89,5 +89,6 @@ int number_of_moves(struct game_state start) {
             }
         }
     }
+    free_list(q.data);
     return -1;
 }
