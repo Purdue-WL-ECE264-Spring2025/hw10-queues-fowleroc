@@ -5,12 +5,12 @@ bool inqueue(struct queue *q, uint64_t key);
 
 //helper functions for BFS
 void enqueue(struct queue *q, struct game_state state) {
-    uint64_t state_enc = serialize(state);
+    size_t state_enc = serialize(state);
     insert_at_head(&(q->data), state_enc);
 }
 
 struct game_state dequeue(struct queue *q) { 
-    uint64_t node_enc = remove_from_tail(&(q->data));
+    size_t node_enc = remove_from_tail(&(q->data));
     return (deserialize(node_enc)); 
 }
 
@@ -68,7 +68,7 @@ bool istarget(struct game_state state) {
 }
 
 int number_of_moves(struct game_state start) { 
-    struct queue q = {0};
+    struct queue q = {.data.head=NULL};
     enqueue(&q, start);
     
     while (q.data.head != NULL) {
@@ -83,7 +83,7 @@ int number_of_moves(struct game_state start) {
         int count = generate_next_states(curr, next);
 
         for (int i = 0; i < count; i++) {
-            uint64_t key = serialize(next[i]);
+            size_t key = serialize(next[i]);
             if (!inqueue(&q, key)) {
                 enqueue(&q, next[i]);
             }
